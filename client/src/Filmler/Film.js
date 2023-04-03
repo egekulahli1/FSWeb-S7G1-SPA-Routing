@@ -1,20 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
 export default function Film(props) {
   const [movie, setMovie] = useState();
 
-  let id = 1;
+  // let id = 3;
+  // App.js'den <Route path="/movies/:id">
+  let { id, repoTitle } = useParams();
   // URL'den alınan :id parametresini bu değişkene aktarın
 
   useEffect(() => {
     axios
       .get(`http://localhost:5001/api/filmler/${id}`) // Bu uç noktayı Postman'le çalışın
-      .then(response => {
-          // Bu kısmı log statementlarıyla çalışın
-          // ve burdan gelen response'u 'movie' e aktarın
+      .then((response) => {
+        // Bu kısmı log statementlarıyla çalışın
+        // ve burdan gelen response'u 'movie' e aktarın
+        console.log("Film.js", response.data);
+        setMovie(response.data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
       });
     // Bu effect her `id ` değiştiğinde çalışmalı
@@ -33,7 +38,9 @@ export default function Film(props) {
   return (
     <div className="save-wrapper">
       <div className="movie-card">
-        <h2>{title}</h2>
+        <h2>
+          {title} {repoTitle}
+        </h2>
         <div className="movie-director">
           Director: <em>{director}</em>
         </div>
@@ -42,7 +49,7 @@ export default function Film(props) {
         </div>
         <h3>Actors</h3>
 
-        {stars.map(star => (
+        {stars.map((star) => (
           <div key={star} className="movie-star">
             {star}
           </div>
